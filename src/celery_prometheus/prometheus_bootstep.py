@@ -22,6 +22,7 @@ if celery_version.major < 5:
 def add_prometheus_option(app) -> None:
     help = "Celery Prometheus Configuration."
     if celery_version.major < 5:
+
         def add_preload_arguments(parser):
             parser.add_argument("--prometheus-collector-addr", default=None, help=help)
 

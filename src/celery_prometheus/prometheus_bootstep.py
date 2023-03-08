@@ -5,8 +5,8 @@ from typing import Any, Mapping, Optional, cast
 
 from celery import VERSION as celery_version  # type: ignore
 from celery import Celery
-from prometheus_client import REGISTRY, start_http_server  # type: ignore
-from prometheus_client.multiprocess import MultiProcessCollector  # type: ignore
+from prometheus_client import REGISTRY, start_http_server
+from prometheus_client.multiprocess import MultiProcessCollector
 
 log = logging.getLogger(__name__)
 

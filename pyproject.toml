@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "celery-prometheus"
-version = "1.0.0"
+version = "1.0.1"
 description = "Celery with your own prometheus metrics"
 authors = ["Guillaume Gauvrit <guillaume@gandi.net>"]
 readme = "README.md"

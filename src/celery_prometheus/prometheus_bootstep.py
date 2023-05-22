@@ -5,7 +5,7 @@ from typing import Any, Mapping, Optional, cast
 
 from celery import VERSION as celery_version  # type: ignore
 from celery import Celery
-from prometheus_client import REGISTRY, start_http_server
+from prometheus_client import CollectorRegistry, start_http_server
 from prometheus_client.multiprocess import MultiProcessCollector
 
 log = logging.getLogger(__name__)
@@ -53,7 +53,8 @@ def attach_prometheus_registry(app: Celery, prometheus_addr: Optional[str]) -> N
     """Celery loader based on yaml file."""
 
     if prometheus_addr:
-        MultiProcessCollector(REGISTRY)
+        registry = CollectorRegistry()
+        MultiProcessCollector(registry)
         prom_addr, prom_port = prometheus_addr.rsplit(":")
         port = int(prom_port)
-        start_http_server(port, prom_addr, REGISTRY)
+        start_http_server(port, prom_addr, registry)

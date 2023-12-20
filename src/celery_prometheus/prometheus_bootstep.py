@@ -39,7 +39,12 @@ def add_prometheus_option(app: Celery) -> None:
         from click import Option
 
         app.user_options["preload"].add(
-            Option(["--prometheus-collector-addr"], required=False, help=help)
+            Option(
+                ["--prometheus-collector-addr"],
+                required=False,
+                help=help,
+                default=os.getenv("CELERY_PROMETHEUS_COLLECTOR_ADDR"),
+            )
         )
 
         class PrometheusBootstep(bootsteps.Step):

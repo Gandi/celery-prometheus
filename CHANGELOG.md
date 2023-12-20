@@ -1,5 +1,3 @@
-# Changelog
-
 ## Release 1.0.1 (2023-05-22)
 
 - Fix usage if the default registry REGISTRY was used

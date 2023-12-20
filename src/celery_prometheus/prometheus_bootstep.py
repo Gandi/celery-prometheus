@@ -52,7 +52,7 @@ def add_prometheus_option(app: Celery) -> None:
                 self,
                 parent: bootsteps.Step,
                 prometheus_collector_addr: str = "",
-                **options: Any
+                **options: Any,
             ) -> None:
                 attach_prometheus_registry(app, prometheus_collector_addr)
 

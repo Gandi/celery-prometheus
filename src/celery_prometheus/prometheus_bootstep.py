@@ -1,5 +1,6 @@
 """Helper for celery."""
 import logging
+import os
 from argparse import ArgumentParser
 from typing import Any, Mapping, Optional, cast
 
@@ -26,7 +27,11 @@ def add_prometheus_option(app: Celery) -> None:
     if celery_version.major < 5:
 
         def add_preload_arguments(parser: ArgumentParser) -> None:
-            parser.add_argument("--prometheus-collector-addr", default=None, help=help)
+            parser.add_argument(
+                "--prometheus-collector-addr",
+                default=os.getenv("CELERY_PROMETHEUS_COLLECTOR_ADDR"),
+                help=help,
+            )
 
         app.user_options["preload"].add(add_preload_arguments)
     else:

@@ -1,31 +1,37 @@
-[tool.poetry]
+[project]
 name = "celery-prometheus"
-version = "1.1.0"
+version = "2.1.2"
 description = "Celery with your own prometheus metrics"
-authors = ["Guillaume Gauvrit <guillaume@gandi.net>"]
+authors = [{ name = "Guillaume Gauvrit", email = "guillaume@gandi.net" }]
 readme = "README.md"
-license = "BSD-Derived"
+requires-python = ">=3.9"
+dependencies = ["celery>=5.4.0,<6", "prometheus-client >=0.17,<1"]
 
-[tool.poetry.dependencies]
-python = "^3.7"
-celery = ">=4"
-
-[tool.poetry.group.dev.dependencies]
-black = "^23.1.0"
-flake8 = "5.0.4"
-isort = "5.11.4"
-mypy = "1.0.0"
-prometheus-client = "^0.16.0"
-types-setuptools = "^67.4.0.3"
+[dependency-groups]
+dev = ["celery>=5.4.0,<6", "mypy>=1.13.0,<2"]
 
 [[tool.mypy.overrides]]
 disallow_any_generics = true
 disallow_untyped_defs = true
 module = "celery_prometheus.*"
 
-[tool.isort]
-profile = "black"
+[[tool.mypy.overrides]]
+module = ["celery.*"]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    "B",   # bug bear security warning
+    "I",   # isort import order
+    "F",   # pyflakes
+    "UP",  # alter when better syntax is available
+    "RUF", #  the ruff devleoper's own rules
+]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"

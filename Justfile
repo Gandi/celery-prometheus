@@ -1,33 +1,41 @@
 package := 'celery_prometheus'
 
 install:
-    poetry install --with dev
+    uv sync
 
 lint:
-    poetry run flake8 && echo "$(tput setaf 10)Success: no lint issue$(tput setaf 7)"
+    uv run ruff check .
 
-mypy:
-    poetry run mypy src/
+typecheck:
+    uv run mypy src/
 
-black:
-    poetry run isort .
-    poetry run black .
+fmt:
+    uv run ruff check --fix .
+    uv run ruff format src
 
-release major_minor_patch: && changelog
-    poetry version {{major_minor_patch}}
-    poetry install
+release major_minor_patch: changelog
+    #! /bin/bash
+    # Try to bump the version first
+    if ! uvx pdm bump {{major_minor_patch}}; then
+        # If it fails, check if pdm-bump is installed
+        if ! uvx pdm self list | grep -q pdm-bump; then
+            # If not installed, add pdm-bump
+            uvx pdm self add pdm-bump
+        fi
+        # Attempt to bump the version again
+        uvx pdm bump {{major_minor_patch}}
+    fi
+    uv sync
 
 changelog:
-    poetry run python scripts/write_changelog.py
+    uv run python scripts/write_changelog.py
     cat CHANGELOG.md >> CHANGELOG.md.new
     rm CHANGELOG.md
     mv CHANGELOG.md.new CHANGELOG.md
     $EDITOR CHANGELOG.md
 
 publish:
-    git commit -am "Release $(poetry version -s)"
-    poetry build
-    poetry publish
+    git commit -am "Release $(uv run scripts/get_version.py)"
     git push
-    git tag "$(poetry version -s)"
-    git push origin "$(poetry version -s)"
+    git tag "v$(uv run scripts/get_version.py)"
+    git push origin "v$(uv run scripts/get_version.py)"

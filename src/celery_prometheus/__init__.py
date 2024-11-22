@@ -1,10 +1,7 @@
-import pkg_resources
-
-try:
-    __version__ = pkg_resources.get_distribution("celery_prometheus").version
-except pkg_resources.DistributionNotFound:
-    pass
+import importlib.metadata
 
 from .prometheus_bootstep import add_prometheus_option
+
+__version__ = importlib.metadata.version("celery-prometheus")
 
 __all__ = ["add_prometheus_option"]
